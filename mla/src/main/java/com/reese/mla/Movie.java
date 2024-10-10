@@ -169,7 +169,7 @@ public class Movie {
                     //Informs user movie is found and asks them to confirm deletion
                     Methods.showMessage("Information On Found Movie:\n" + movie.toString());
                     char yesNo = Methods.getInput("Are You Sure You Want To Remove The Movie? Y/N").charAt(0);
-                    Character.toLowerCase(yesNo);
+                    yesNo = Character.toLowerCase(yesNo);
                     switch(yesNo){
                         case 'y'://user wants to delete
                             list.remove(movie);
@@ -193,12 +193,12 @@ public class Movie {
         catch(NumberFormatException NFE){
             boolean found = false;
             for (Movie movie : list) {
-                if(tempString.equals(movie.getMovieName())){
+                if(tempString.toLowerCase().equals(movie.getMovieName().toLowerCase())){
                     found = true;
                     //Informs user movie is found and asks them to confirm deletion
                     Methods.showMessage("Information On Found Movie:\n" + movie.toString());
-                    char yesNo = Methods.getInput("Are You Sure You Want To Remove The Movie?").charAt(0);
-                    Character.toLowerCase(yesNo);
+                    char yesNo = Methods.getInput("Are You Sure You Want To Remove The Movie? Y/N").charAt(0);
+                    yesNo = Character.toLowerCase(yesNo);
                     switch(yesNo){
                         case 'y'://user wants to delete
                             list.remove(movie);
@@ -259,19 +259,19 @@ public class Movie {
             }
             
         }
-        //alternative if user did not enter an ID
+        //alternative if user did not enter an ID number
         catch(NumberFormatException NFE){
             boolean found = false;
+            Movie modMovie = new Movie();
             for (Movie movie : list) {
                 //checks for match
-                if (movie.getMovieName().equals(tempString)){
+                if (movie.getMovieName().toLowerCase().equals(tempString.toLowerCase())){
                     found = true;
                     //create copy of movie and later check new movie if it has a dupe,
                     //then if no dupes "adds" new movie into list and sorts
                     Movie originalMovie = movie;
                     list.remove(movie);
                     Methods.showMessage("Information On Found Movie:\n" + originalMovie.toString());
-                    Movie modMovie = new Movie();
                     modMovie.createMovie();
                     for (Movie comparedMovie : list) {
                         //Found Dupe
@@ -282,18 +282,18 @@ public class Movie {
                             dupe = true;
                         }
                     }
-                    if(!dupe){
-                        list.add(modMovie);
-                        list.sort(MovieComparator.sortByIDAsc());
-                    }
-                    
-                    break;
+                    break;//stops needless future iterations of the loop
                 }
-            }
+            }//end For
             if(!found){
                 Methods.showMessage("Movie Name not Found");
             }
-        }
+            else if(!dupe){
+                list.add(modMovie);
+                list.sort(MovieComparator.sortByIDAsc());
+            }
+            
+        }//end catch
     }
 
     public static void movieMenu(List<Movie> list){
@@ -312,6 +312,7 @@ public class Movie {
             switch(userChoice){
                 case '1'://Display All Movies
                     double avgScore = 0.00;
+                    int avgCount = 0;
                     //Ask user how to sort
                     userChoice = Methods.getInput(
                         "Please choose which way to sort:\n" +
@@ -357,13 +358,16 @@ public class Movie {
                             break;
                         default:
                             Methods.showMessage("Invalid Input, sorting by ID Ascending");
-                    }
+                    }//end inner switch
                     
                     for (Movie movie : list) {
-                        Methods.showMessage(movie.toString());
-                        avgScore += movie.getReviewScore();
+                        if(movie.getMovieID() != 0){
+                            Methods.showMessage(movie.toString());
+                            avgScore += movie.getReviewScore();
+                            avgCount++;
+                        }
                     }
-                    avgScore = avgScore/list.size();
+                    avgScore = avgScore/avgCount;
                     Methods.showMessage("Average Review Score: " + String.format("%.1f", avgScore));
                     break;//End Case 1 Display all Movies
                 case '2'://Create A Movie
@@ -382,8 +386,6 @@ public class Movie {
                 default:
                     Methods.showMessage("Invalid Input, Please Try Again; Choose Option 1-5");
             }
-
-
         }while(!toExit);
     }//End movieMenu
 

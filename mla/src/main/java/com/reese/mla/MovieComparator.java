@@ -10,12 +10,12 @@ public class MovieComparator {
     }
     static Comparator<Movie> sortByIDDesc(){
         return Comparator.comparing(Movie::getMovieID).reversed();
-    }
+    }    
     static Comparator<Movie> sortByMovieNameAsc(){
-        return Comparator.comparing(Movie::getMovieName);
+        return Comparator.comparing(Movie::getMovieName, String.CASE_INSENSITIVE_ORDER);   
     }
     static Comparator<Movie> sortByMovieNameDesc(){
-        return Comparator.comparing(Movie::getMovieName).reversed();
+        return Comparator.comparing(Movie::getMovieName, String.CASE_INSENSITIVE_ORDER).reversed();
     }
     static Comparator<Movie> sortByReleaseYearAsc(){
         return Comparator.comparing(Movie::getReleaseYear);
@@ -24,16 +24,16 @@ public class MovieComparator {
         return Comparator.comparing(Movie::getReleaseYear).reversed();
     }
     static Comparator<Movie> sortByDirectorAsc(){
-        return Comparator.comparing(Movie::getDirector);
+        return Comparator.comparing(Movie::getDirector, String.CASE_INSENSITIVE_ORDER);
     }
     static Comparator<Movie> sortByDirectorDesc(){
-        return Comparator.comparing(Movie::getDirector).reversed();
+        return Comparator.comparing(Movie::getDirector, String.CASE_INSENSITIVE_ORDER).reversed();
     }
     static Comparator<Movie> sortByComposerAsc(){
-        return Comparator.comparing(Movie::getComposer);
+        return Comparator.comparing(Movie::getComposer, String.CASE_INSENSITIVE_ORDER);
     }
     static Comparator<Movie> sortByComposerDesc(){
-        return Comparator.comparing(Movie::getComposer).reversed();
+        return Comparator.comparing(Movie::getComposer, String.CASE_INSENSITIVE_ORDER).reversed();
     }
     static Comparator<Movie> sortByReviewScoreAsc(){
         return Comparator.comparing(Movie::getReviewScore);

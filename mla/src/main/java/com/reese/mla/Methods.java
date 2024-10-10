@@ -1,6 +1,7 @@
 package com.reese.mla;
 /*                               Methods
  * This contains methods that will be reused many times and simplfy the code
+ * mostly in terms of readability
  */
 import java.util.Scanner;
 
