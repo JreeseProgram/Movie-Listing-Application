@@ -225,6 +225,9 @@ public class Movie {
         boolean dupe = false;
         try{
             boolean found = false;
+            Movie modMovie = new Movie();
+            Movie originalMovie = new Movie();
+
             tempString = Methods.getInput("Please Enter in ID or Name");
             int input = Integer.parseInt(tempString);
             for (Movie movie : list) {
@@ -233,43 +236,47 @@ public class Movie {
                     found = true;
                     //create copy of movie and later check new movie if it has a dupe,
                     //then if no dupes "adds" new movie into list and sorts
-                    Movie originalMovie = movie;
+                    originalMovie = movie;
                     list.remove(movie);
                     Methods.showMessage("Information On Found Movie:\n" + originalMovie.toString());
-                    Movie modMovie = new Movie();
                     modMovie.createMovie();
                     for (Movie comparedMovie : list) {
                         //Found Dupe
                         if (comparedMovie.getMovieID() == modMovie.getMovieID()){
                             Methods.showMessage("Dupe ID, reverting any changes");
-                            list.add(originalMovie);
-                            list.sort(MovieComparator.sortByIDAsc());
                             dupe = true;
+                            break;
                         }
                     }
-                    if(!dupe){
-                        list.add(modMovie);
-                        list.sort(MovieComparator.sortByIDAsc());
-                    }
-                    break;
+                    break;//stops needless future iterations of the loop
                 }
             }
             if(!found){
                 Methods.showMessage("Movie ID Not Found");
             }
+            else if(!dupe){
+                list.add(modMovie);
+                list.sort(MovieComparator.sortByIDAsc());
+            }
+            else{
+                list.add(originalMovie);
+                list.sort(MovieComparator.sortByIDAsc());
+            }
+            
             
         }
         //alternative if user did not enter an ID number
         catch(NumberFormatException NFE){
             boolean found = false;
             Movie modMovie = new Movie();
+            Movie originalMovie = new Movie();
             for (Movie movie : list) {
                 //checks for match
                 if (movie.getMovieName().toLowerCase().equals(tempString.toLowerCase())){
                     found = true;
                     //create copy of movie and later check new movie if it has a dupe,
                     //then if no dupes "adds" new movie into list and sorts
-                    Movie originalMovie = movie;
+                    originalMovie = movie;
                     list.remove(movie);
                     Methods.showMessage("Information On Found Movie:\n" + originalMovie.toString());
                     modMovie.createMovie();
@@ -277,12 +284,11 @@ public class Movie {
                         //Found Dupe
                         if (comparedMovie.getMovieID() == modMovie.getMovieID()){
                             Methods.showMessage("Dupe ID, reverting any changes");
-                            list.add(originalMovie);
-                            list.sort(MovieComparator.sortByIDAsc());
                             dupe = true;
+                            break;
                         }
                     }
-                    break;//stops needless future iterations of the loop
+                    break;
                 }
             }//end For
             if(!found){
@@ -290,6 +296,10 @@ public class Movie {
             }
             else if(!dupe){
                 list.add(modMovie);
+                list.sort(MovieComparator.sortByIDAsc());
+            }
+            else{
+                list.add(originalMovie);
                 list.sort(MovieComparator.sortByIDAsc());
             }
             

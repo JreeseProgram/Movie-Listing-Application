@@ -49,6 +49,7 @@ public class FileOps {
             int dupeCount = 0;
             //set used to reduce duplicates and having the full list be an array list would not be desirable
             Set<Integer> IDtoRemove = new LinkedHashSet<Integer>();
+        
             for (Movie movie : list) {
                 dupeCount = 0;
                 for(Movie movieCompare : list){
