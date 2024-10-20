@@ -25,7 +25,6 @@ public class Movie {
         this.director = director;
         this.composer = composer;
         this.reviewScore = reviewScore;
-        
     }
 
     public void createMovie(){
@@ -93,7 +92,7 @@ public class Movie {
 
     public String getDirector(){
         return director;
-    }
+    }   
 
     public boolean setDirector(){
         this.director = Methods.getInput("Please Enter Director name");
@@ -116,8 +115,8 @@ public class Movie {
     public boolean setReviewScore(){
         try{
             double tempScore = Double.parseDouble(Methods.getInput("Please Enter the Movies Review Score:"));
-            if(tempScore < 0.00){
-                Methods.showMessage("The Score Must Be at least 0");
+            if(tempScore < 0.1){
+                Methods.showMessage("The Score Must Be at least 0.1");
                 return false;
             }
             else if(tempScore > 10.00){
