@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="MovieTest" time="0.035" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="MovieTest" time="0.065" tests="23" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.class.path" value="C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\test-classes;C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\classes;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.2\junit-jupiter-engine-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-engine\1.11.2\junit-platform-engine-1.11.2.jar;C:\Users\JacobWork\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.2\junit-jupiter-api-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-commons\1.11.2\junit-platform-commons-1.11.2.jar;"/>
+    <property name="java.class.path" value="C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\test-classes;C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\classes;C:\Users\JacobWork\.m2\repository\org\mockito\mockito-all\2.0.2-beta\mockito-all-2.0.2-beta.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.2\junit-jupiter-engine-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-engine\1.11.2\junit-platform-engine-1.11.2.jar;C:\Users\JacobWork\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.2\junit-jupiter-api-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-commons\1.11.2\junit-platform-commons-1.11.2.jar;"/>
     <property name="java.vm.vendor" value="Microsoft"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="user.variant" value=""/>
@@ -14,9 +14,9 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Microsoft\jdk-21.0.4.7-hotspot\bin"/>
-    <property name="sun.java.command" value="C:\Users\JacobWork\AppData\Local\Temp\surefire5903585650333830394\surefirebooter-20241018163356094_3.jar C:\Users\JacobWork\AppData\Local\Temp\surefire5903585650333830394 2024-10-18T16-33-56_018-jvmRun1 surefire-20241018163356094_1tmp surefire_0-20241018163356094_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\JacobWork\AppData\Local\Temp\surefire12092720019408696649\surefirebooter-20241025133538519_3.jar C:\Users\JacobWork\AppData\Local\Temp\surefire12092720019408696649 2024-10-25T13-35-38_428-jvmRun1 surefire-20241025133538519_1tmp surefire_0-20241025133538519_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="surefire.test.class.path" value="C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\test-classes;C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\classes;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.2\junit-jupiter-engine-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-engine\1.11.2\junit-platform-engine-1.11.2.jar;C:\Users\JacobWork\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.2\junit-jupiter-api-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-commons\1.11.2\junit-platform-commons-1.11.2.jar;"/>
+    <property name="surefire.test.class.path" value="C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\test-classes;C:\Users\JacobWork\Desktop\Documents\School\Software Development 1\Projects\MLA\mla\target\classes;C:\Users\JacobWork\.m2\repository\org\mockito\mockito-all\2.0.2-beta\mockito-all-2.0.2-beta.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.2\junit-jupiter-engine-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-engine\1.11.2\junit-platform-engine-1.11.2.jar;C:\Users\JacobWork\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\JacobWork\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.2\junit-jupiter-api-5.11.2.jar;C:\Users\JacobWork\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\JacobWork\.m2\repository\org\junit\platform\junit-platform-commons\1.11.2\junit-platform-commons-1.11.2.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\JacobWork"/>
     <property name="user.language" value="en"/>
@@ -29,7 +29,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\JacobWork\AppData\Local\Temp\surefire5903585650333830394\surefirebooter-20241018163356094_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\JacobWork\AppData\Local\Temp\surefire12092720019408696649\surefirebooter-20241025133538519_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.4+7-LTS"/>
@@ -58,9 +58,82 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="setMovieIDTest" classname="MovieTest" time="0.014">
+  <testcase name="setComposerTest" classname="MovieTest" time="0.016">
+    <system-out><![CDATA[Please Enter the Composer for the Movie
+]]></system-out>
+  </testcase>
+  <testcase name="setMovieNameTestBool" classname="MovieTest" time="0.003">
+    <system-out><![CDATA[Please Enter the Movie Name:
+]]></system-out>
+  </testcase>
+  <testcase name="setReviewScoreTest" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Movies Review Score:
+]]></system-out>
+  </testcase>
+  <testcase name="setReleaseYearTestLowYear" classname="MovieTest" time="0.002">
+    <system-out><![CDATA[Please Enter the Movie Release Year:
+Movie must be released as of or later than 1888
+]]></system-out>
+  </testcase>
+  <testcase name="getDirectorTest" classname="MovieTest" time="0.001"/>
+  <testcase name="setReviewScoreTestHigh" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Movies Review Score:
+The Score Must Be less than or equal to 10.00
+]]></system-out>
+  </testcase>
+  <testcase name="setDirectorTest" classname="MovieTest" time="0.002">
+    <system-out><![CDATA[Please Enter Director name
+]]></system-out>
+  </testcase>
+  <testcase name="setReviewScoreTestLow" classname="MovieTest" time="0.007">
+    <system-out><![CDATA[Please Enter the Movies Review Score:
+The Score Must Be at least 0.1
+]]></system-out>
+  </testcase>
+  <testcase name="setReviewScoreTestNaN" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Movies Review Score:
+Invalid, Must Be a number greater than or equal to 0 and also less than or equal to 10
+]]></system-out>
+  </testcase>
+  <testcase name="setMovieNameTest" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Movie Name:
+]]></system-out>
+  </testcase>
+  <testcase name="getReleaseYearTest" classname="MovieTest" time="0.001"/>
+  <testcase name="setReleaseYearTestNaN" classname="MovieTest" time="0.002">
+    <system-out><![CDATA[Please Enter the Movie Release Year:
+Invalid, Must Be a Whole Number Greater Than or Equal to 1888
+]]></system-out>
+  </testcase>
+  <testcase name="setMovieIDTestNegNum" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter Movie ID:
+Invalid, ID must be greater than 0
+]]></system-out>
+  </testcase>
+  <testcase name="setMovieIDTest" classname="MovieTest" time="0.001">
     <system-out><![CDATA[Please Enter Movie ID:
 ]]></system-out>
   </testcase>
+  <testcase name="setDirectorTestBool" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter Director name
+]]></system-out>
+  </testcase>
+  <testcase name="toStringTest" classname="MovieTest" time="0.002"/>
+  <testcase name="setReleaseYearTest" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Movie Release Year:
+]]></system-out>
+  </testcase>
+  <testcase name="setMovieIDTestNaN" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter Movie ID:
+Please Enter a Whole Number Greater Than 0
+]]></system-out>
+  </testcase>
+  <testcase name="getComposerTest" classname="MovieTest" time="0.0"/>
+  <testcase name="getReviewScoreTest" classname="MovieTest" time="0.002"/>
+  <testcase name="setComposerTestBool" classname="MovieTest" time="0.001">
+    <system-out><![CDATA[Please Enter the Composer for the Movie
+]]></system-out>
+  </testcase>
+  <testcase name="getMovieNameTest" classname="MovieTest" time="0.0"/>
   <testcase name="getMovieIDTest" classname="MovieTest" time="0.0"/>
 </testsuite>

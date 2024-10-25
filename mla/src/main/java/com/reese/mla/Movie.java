@@ -313,10 +313,11 @@ public class Movie {
             userChoice = Methods.getInput(
                 "        Menu:\n" +
                 "1) Display All Movies\n" +
-                "2) Create a Movie\n" +
-                "3) Modify a Movie\n" + 
-                "4) Delete a Movie\n" + 
-                "5) Exit"
+                "2) Reload With New List\n" +
+                "3) Create a Movie\n" +
+                "4) Modify a Movie\n" + 
+                "5) Delete a Movie\n" + 
+                "6) Exit"
             ).charAt(0);
             switch(userChoice){
                 case '1'://Display All Movies
@@ -379,16 +380,19 @@ public class Movie {
                     avgScore = avgScore/avgCount;
                     Methods.showMessage("Average Review Score: " + String.format("%.1f", avgScore));
                     break;//End Case 1 Display all Movies
-                case '2'://Create A Movie
+                case '2'://Load from New List
+                    FileOps.hotloadList(list);
+                    break;
+                case '3'://Create A Movie
                     Movie.addMovie(list);
                     break;
-                case '3'://Modify a Movie
+                case '4'://Modify a Movie
                     Movie.modifyMovie(list);
                     break;
-                case '4'://Delete a Movie
+                case '5'://Delete a Movie
                     Movie.deleteMovie(list);
                     break;
-                case '5'://Exit
+                case '6'://Exit
                     Methods.showMessage("Good Bye!");
                     toExit = true;
                     break;
