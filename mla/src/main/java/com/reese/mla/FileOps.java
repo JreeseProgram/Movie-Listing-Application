@@ -2,6 +2,8 @@ package com.reese.mla;
 /*                          FileOps
  * Creates/reads a file from the disk to add into the list.
  */
+import javafx.collections.ObservableList;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,10 +16,12 @@ import java.util.List;
 import java.util.Set;
 
 public class FileOps {
-    public static void startupCheck(List<Movie> list){
+    public static void startupCheck(ObservableList<Movie> list){
         //Ensure files exists
         Path folder = Paths.get("./StartupMovies/");
         Path filePath = Paths.get("./StartupMovies/Movies.txt");
+        //Allows to get all information before editing our list
+        List<Movie> tempList= new ArrayList<Movie>();
        
         try{
             if(Files.notExists(folder)){
@@ -40,9 +44,9 @@ public class FileOps {
                 fromFile.add(temp.split(","));
             }
             if(!(fromFile.size() == 0)){
-            //takes the new delimited strings and passes them into the book constructor
+            //takes the new delimited strings and passes them into the Movie constructor
                 for (String[] strings : fromFile) {
-                    list.add(new Movie(Integer.parseInt(strings[0]), strings[1],Integer.parseInt(strings[2]), strings[3], strings[4], Double.parseDouble(strings[5])));
+                    tempList.add(new Movie(Integer.parseInt(strings[0]), strings[1],Integer.parseInt(strings[2]), strings[3], strings[4], Double.parseDouble(strings[5])));
                 }
             }
             //Search for duplicates
@@ -50,9 +54,9 @@ public class FileOps {
             //set used to reduce duplicates and having the full list be an array list would not be desirable
             Set<Integer> IDtoRemove = new LinkedHashSet<Integer>();
         
-            for (Movie movie : list) {
+            for (Movie movie : tempList) {
                 dupeCount = 0;
-                for(Movie movieCompare : list){
+                for(Movie movieCompare : tempList){
                     if(movie.getMovieID() == movieCompare.getMovieID()){
                         dupeCount++;
                     }
@@ -63,8 +67,10 @@ public class FileOps {
             }
             //delete dupes entirely (if multiple 2's, remove all 2's) then sort
             for (Integer id : IDtoRemove) {
-                list.removeIf(movie -> movie.getMovieID() == id);
+                tempList.removeIf(movie -> movie.getMovieID() == id);
             }
+            //once all validation complete, then change list over
+            list.setAll(tempList);
             list.sort(MovieComparator.sortByIDAsc());
         }
         catch(IOException IOE){
@@ -81,15 +87,16 @@ public class FileOps {
         }
     }
 
-    public static void hotloadList(List<Movie> list){
+    public static boolean hotloadList(ObservableList<Movie> list, String path){
         //Get File Path From User
-        Path filePath = Paths.get(Methods.getInput("Enter Path For Your Movies File"));
+        Path filePath = Paths.get(path);
         List<Movie> tempList = new ArrayList<>();
         boolean fileExists;
        
         if (Files.notExists(filePath)) {
             fileExists = false;
             Methods.showMessage("File Not Found");
+            return false;
         }
         else{
             fileExists = true;
@@ -132,21 +139,27 @@ public class FileOps {
                     tempList.removeIf(movie -> movie.getMovieID() == id);
                 }
                 list.clear();
-                list.addAll(tempList);
+                list.setAll(tempList);
                 list.sort(MovieComparator.sortByIDAsc());
+                return true;
             }
             catch(IOException IOE){
                 Methods.showMessage(IOE.toString());
+                return false;
             }
             catch(IndexOutOfBoundsException IOOBE){
                 Methods.showMessage("List had an out of bounds exception");
+                return false;
             }
             catch(NumberFormatException NFE){
                 Methods.showMessage("When Creating a New Movie, There was a field in the wrong section ignoring item");
+                return false;
             }
             catch(NullPointerException NPE){
                 Methods.showMessage("Startup File is empty, Ignoring file");
+                return false;
             }        
         }//End if(fileExists)
+        else return false;
     }
 }
