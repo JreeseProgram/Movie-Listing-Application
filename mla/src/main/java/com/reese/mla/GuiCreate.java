@@ -1,5 +1,11 @@
 package com.reese.mla;
 
+/*               GuiCreate
+* Handles all the different menus of the GUI in every
+* possible state it could be in
+ */
+
+
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -9,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.*;
@@ -21,7 +26,6 @@ import javafx.scene.layout.VBox;
 import java.io.File;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
