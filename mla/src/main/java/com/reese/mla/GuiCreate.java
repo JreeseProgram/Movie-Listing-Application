@@ -1024,7 +1024,7 @@ public class GuiCreate {
         grid.setHgap(12);
 
         //Text
-        Text header = new Text("Modify a Movie");
+        Text header = new Text("Delete a Movie");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
         GridPane.setHalignment(header,HPos.CENTER);
 
