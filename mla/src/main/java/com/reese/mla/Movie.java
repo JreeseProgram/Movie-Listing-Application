@@ -29,16 +29,14 @@ public class Movie {
         this.reviewScore = reviewScore;
     }
 
-
-    @Deprecated
-    //only useful for CLI
-    public void createMovie(){
-//        setMovieID();
-//        setMovieName();
-//        setReleaseYear();
-//        setDirector();
-//        setComposer();
-//        setReviewScore();
+    //only useful for CLI or testing.
+    public void createMovie(String id, String name, String year, String director, String composer, String review){
+        setMovieID(id);
+        setMovieName(name);
+        setReleaseYear(year);
+        setDirector(director);
+        setComposer(composer);
+        setReviewScore(review);
     }
 
     public int getMovieID(){
@@ -118,6 +116,9 @@ public class Movie {
         return reviewScore;
     }
 
+    //Attempts to set review score
+    //0 means success, 1 means score was too low
+    //2 means too high, 3 means NaN
     public int setReviewScore(String stringReviewScore){
         try{
             double tempScore = Double.parseDouble(stringReviewScore);
@@ -283,105 +284,6 @@ public class Movie {
             Collections.sort(list, filterValues.get("isAscending") ? MovieComparator.sortByReviewScoreAsc() : MovieComparator.sortByReviewScoreDesc());
         }
     }
-
-    @Deprecated
-    public static void movieMenu(List<Movie> list){
-//        boolean toExit = false;
-//        char userChoice = ' ';
-//        do{
-//            Methods.showMessage("------------------------------------------------------------");
-//            userChoice = Methods.getInput(
-//                "        Menu:\n" +
-//                "1) Display All Movies\n" +
-//                "2) Reload With New List\n" +
-//                "3) Create a Movie\n" +
-//                "4) Modify a Movie\n" +
-//                "5) Delete a Movie\n" +
-//                "6) Exit"
-//            ).charAt(0);
-//            switch(userChoice){
-//                case '1'://Display All Movies
-//                    double avgScore = 0.00;
-//                    int avgCount = 0;
-//                    //Ask user how to sort
-//                    userChoice = Methods.getInput(
-//                        "Please choose which way to sort:\n" +
-//                        "1) MovieID\n" +
-//                        "2) Movie Name\n" +
-//                        "3) Release Year\n" +
-//                        "4) Director\n" +
-//                        "5) Composer\n" +
-//                        "6) Review Score\n"
-//                    ).charAt(0);
-//                    //ask user if they want ascending or descending order
-//                    boolean isAsc = true;
-//                    char tempChar = Methods.getInput("Sorted in (a)scending or (d)escending order?").charAt(0);
-//                    tempChar = Character.toLowerCase(tempChar);
-//                    if(tempChar == 'a'){
-//                        isAsc = true;
-//                    }
-//                    else if(tempChar == 'd'){
-//                        isAsc = false;
-//                    }
-//                    else {
-//                        Methods.showMessage("Invalid input, defaulting to ascending");
-//                    }
-//                    //Does the Sort of the list
-//                    switch (userChoice) {
-//                        case '1'://Movie ID
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByIDAsc() : MovieComparator.sortByIDDesc());
-//                            break;
-//                        case '2'://Movie Name
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByMovieNameAsc() : MovieComparator.sortByMovieNameDesc());
-//                            break;
-//                        case '3'://Release Year
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByReleaseYearAsc() : MovieComparator.sortByReleaseYearDesc());
-//                            break;
-//                        case '4'://Director
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByDirectorAsc() : MovieComparator.sortByDirectorDesc());
-//                            break;
-//                        case '5'://Composer
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByComposerAsc() : MovieComparator.sortByComposerDesc());
-//                            break;
-//                        case '6'://Review Score
-//                            Collections.sort(list, isAsc ? MovieComparator.sortByReviewScoreAsc() : MovieComparator.sortByReviewScoreDesc());
-//                            break;
-//                        default:
-//                            Methods.showMessage("Invalid Input, sorting by ID Ascending");
-//                    }//end inner switch
-//
-//                    for (Movie movie : list) {
-//                        if(movie.getMovieID() != 0){
-//                            Methods.showMessage(movie.toString());
-//                            avgScore += movie.getReviewScore();
-//                            avgCount++;
-//                        }
-//                    }
-//                    avgScore = avgScore/avgCount;
-//                    Methods.showMessage("Average Review Score: " + String.format("%.1f", avgScore));
-//                    break;//End Case 1 Display all Movies
-//                case '2'://Load from New List
-//                    FileOps.hotloadList(list);
-//                    break;
-//                case '3'://Create A Movie
-//                    Movie.addMovie(list);
-//                    break;
-//                case '4'://Modify a Movie
-//                    Movie.modifyMovie(list);
-//                    break;
-//                case '5'://Delete a Movie
-//                    Movie.deleteMovie(list);
-//                    break;
-//                case '6'://Exit
-//                    Methods.showMessage("Good Bye!");
-//                    toExit = true;
-//                    break;
-//                default:
-//                    Methods.showMessage("Invalid Input, Please Try Again; Choose Option 1-5");
-//            }
-//        }while(!toExit);
-    }//End movieMenu
-
 
 
     public String toString(){

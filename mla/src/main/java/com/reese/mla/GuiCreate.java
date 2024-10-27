@@ -98,6 +98,7 @@ public class GuiCreate {
         //Setup Scene
         Scene scene = new Scene(grid, 400,480);
         stage.setTitle("Main Menu");
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
