@@ -6,6 +6,7 @@ package com.reese.mla;
 
 import javafx.collections.ObservableList;
 
+import java.text.Normalizer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,10 @@ public class Movie {
 
     public Movie(int movieID, String movieName, int releaseYear, String director, String composer, double reviewScore){
         this.movieID = movieID;
-        this.movieName = movieName;
+        this.movieName = movieName.replaceAll("'","");
         this.releaseYear = releaseYear;
-        this.director = director;
-        this.composer = composer;
+        this.director = director.replaceAll("'","");
+        this.composer = composer.replaceAll("'","");
         this.reviewScore = reviewScore;
     }
 
@@ -34,7 +35,7 @@ public class Movie {
         setMovieID(id);
         setMovieName(name);
         setReleaseYear(year);
-        setDirector(director);
+        setDirector(director.replaceAll("'",""));
         setComposer(composer);
         setReviewScore(review);
     }
@@ -66,7 +67,7 @@ public class Movie {
     }
 
     public int setMovieName(String movieNameString){
-        this.movieName = movieNameString;
+        this.movieName = movieNameString.replaceAll("'","");
         return 0;
     }
 
@@ -99,7 +100,7 @@ public class Movie {
     }   
 
     public int setDirector(String stringDirector){
-        this.director = stringDirector;
+        this.director = stringDirector.replaceAll("'","");
         return 0;
     }
 
@@ -108,7 +109,7 @@ public class Movie {
     }
 
     public int setComposer(String stringComposer){
-        this.composer = stringComposer;
+        this.composer = stringComposer.replaceAll("'","");
         return 0;
     }
 

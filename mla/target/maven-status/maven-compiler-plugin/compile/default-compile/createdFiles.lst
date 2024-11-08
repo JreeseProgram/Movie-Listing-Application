@@ -4,4 +4,5 @@ com\reese\mla\GuiCreate.class
 module-info.class
 com\reese\mla\MovieComparator.class
 com\reese\mla\Main.class
+com\reese\mla\ConnectionToPass.class
 com\reese\mla\FileOps.class
