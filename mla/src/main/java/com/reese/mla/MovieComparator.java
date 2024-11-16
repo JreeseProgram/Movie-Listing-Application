@@ -1,9 +1,13 @@
 package com.reese.mla;
-/*                     MOVIECOMPARATOR
- * This houses all the sort comparators for the movie object for easier comparison
- */
+
 import java.util.Comparator;
 
+/**
+ * This class holds all the Movie comparators to
+ * allow for easy sorting when needed.
+ * Additionally, only the  Strings have the
+ * case_insensitive_order so ensure proper sorting.
+ */
 public class MovieComparator {
     static Comparator<Movie> sortByIDAsc(){
         return Comparator.comparing(Movie::getMovieID);
@@ -41,9 +45,4 @@ public class MovieComparator {
     static Comparator<Movie> sortByReviewScoreDesc(){
         return Comparator.comparing(Movie::getReviewScore).reversed();
     }
-    
-
-    
-
-
 }

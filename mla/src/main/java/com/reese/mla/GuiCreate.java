@@ -22,26 +22,35 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
-
 import java.io.File;
-
-import java.sql.Connection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * This class contains only static methods used for
+ * handing the GUI
+ */
 public class GuiCreate {
-    //This is not in initialDBSelect as Lambdas can be annoying >:^(
+    // This is not in initialDBSelect as Lambdas can be annoying >:^(
     private static String fullSqlURL = "jdbc:mysql://";
     private static String host = null;
     private static String port = null;
     private static String username = null;
     private static String password = null;
+
+    /**
+     * This method is the startup screen for the application.
+     * It prompts the user for MySQL connection info.
+     * @param list This is the list that holds all the movies.
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void initialDBSelect(ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
 
-        //Create Grid layout
+        // Create Grid layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(30);
@@ -57,8 +66,6 @@ public class GuiCreate {
         Label portText =  new Label("Please Enter In The Port (Typically its: 3306)");
         GridPane.setHalignment(portText,HPos.CENTER);
 
-//        Label dbNameText = new Label("Please Enter DB name");
-//        GridPane.setHalignment(dbNameText, HPos.CENTER);
 
         Label usernameText =  new Label("Please Enter In The UserName (usually: root)");
         GridPane.setHalignment(usernameText,HPos.CENTER);
@@ -70,7 +77,7 @@ public class GuiCreate {
         GridPane.setHalignment(fileChoose,HPos.CENTER);
 
 
-        //Error Display
+        // Error Display
         Label hostError =  new Label();
         GridPane.setHalignment(hostError,HPos.CENTER);
         hostError.setStyle("-fx-text-fill: red;");
@@ -80,11 +87,6 @@ public class GuiCreate {
         GridPane.setHalignment(portError,HPos.CENTER);
         portError.setStyle("-fx-text-fill: red;");
         portError.setVisible(false);
-
-//        Label dbNameError =  new Label();
-//        GridPane.setHalignment(dbNameError,HPos.CENTER);
-//        dbNameError.setStyle("-fx-text-fill: red;");
-//        dbNameError.setVisible(false);
 
         Label usernameError =  new Label();
         GridPane.setHalignment(usernameError,HPos.CENTER);
@@ -101,15 +103,13 @@ public class GuiCreate {
         fileChooseError.setStyle("-fx-text-fill: red;");
         fileChooseError.setVisible(false);
 
-        //Fields
+        // Fields
         TextField hostTextField = new TextField();
         GridPane.setHalignment(hostTextField,HPos.CENTER);
 
         TextField portTextField = new TextField();
         GridPane.setHalignment(portTextField,HPos.CENTER);
 
-//        TextField dbNameTextField = new TextField();
-//        GridPane.setHalignment(dbNameTextField,HPos.CENTER);
 
         TextField usernameTextField = new TextField();
         GridPane.setHalignment(usernameTextField,HPos.CENTER);
@@ -121,7 +121,7 @@ public class GuiCreate {
         GridPane.setHalignment(filePath, HPos.CENTER);
         filePath.setMinWidth(440);
 
-        //Create Buttons
+        // Create Buttons
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select SQL DB File");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("SQL Files", "*.sql"));
@@ -134,14 +134,14 @@ public class GuiCreate {
         importButton.setMinSize(300,50);
         GridPane.setHalignment(importButton, HPos.CENTER);
 
-        //Give Buttons Functionality
-            //lets user choose SQL file
+        // Give Buttons Functionality
+            // Lets user choose SQL file
         browse.setOnAction(action -> {
             File file = fileChooser.showOpenDialog(stage);
             if(file != null)
                 filePath.setText(file.getAbsolutePath());
         });
-            //Handles task of connecting to Database
+            // Handles task of connecting to Database
         importButton.setOnAction(action ->{
             host = hostTextField.getText();
             port = portTextField.getText();
@@ -152,7 +152,7 @@ public class GuiCreate {
             int returnCode;
 
 
-            //Checks everything has values in it
+            // Checks if all fields have values in it
             if(host != null){
                 hostError.setVisible(false);
                 if(port != null){
@@ -163,10 +163,11 @@ public class GuiCreate {
                             passwordError.setVisible(false);
                             if(pathToDB != null){
                                 fileChooseError.setVisible(false);
+                                // As long as initializeDB has a successful operation
                                 if((returnCode = FileOps.initializeDB(list,connection,fullSqlURL,username,password, pathToDB)) == 0){
-                                    //Success Popup
+                                    // Success Popup
                                     Stage successPopup = new Stage();
-                                    //Makes sure you cannot interact with main stage
+                                    // Makes sure you cannot interact with main stage
                                     successPopup.initModality(Modality.APPLICATION_MODAL);
                                     successPopup.setTitle("Successfully Imported SQL");
 
@@ -182,7 +183,7 @@ public class GuiCreate {
                                     popupRoot.setSpacing(30);
                                     popupRoot.getChildren().addAll(successDescription, acknowledge);
 
-                                    //acknowledge button action
+                                    // Acknowledge button action
                                     acknowledge.setOnAction(finalEvent -> {
                                         GuiCreate.mainMenu(list, stage, connection);
                                         successPopup.close();
@@ -194,11 +195,11 @@ public class GuiCreate {
                                 }
                                 else if(returnCode == 1){ //Sql error, possible connection or DB error
                                     Stage failurePopup = new Stage();
-                                    //Makes sure you cannot interact with main stage
+                                    // Makes sure you cannot interact with main stage
                                     failurePopup.initModality(Modality.APPLICATION_MODAL);
                                     failurePopup.setTitle("SQL Error");
 
-                                    //ensures that it doesnt keep overwriting itself
+                                    // Ensures that it doesnt keep overwriting itself leading to infinite errors
                                     fullSqlURL = "jdbc:mysql://";
 
                                     Label failureDescription = new Label("Error processing with SQL, cannot import:\n" +
@@ -256,11 +257,11 @@ public class GuiCreate {
             }
         });
 
-        //Add UI to grid
-            //HBoxes
+        // Add UI to grid
+            // HBoxes
         HBox fileSelectButtons = new HBox(filePath,browse);
         fileSelectButtons.setSpacing(0);
-            //VBoxes
+            // VBoxes
         VBox hostDiv = new VBox(8, hostText, hostError, hostTextField);
         hostDiv.setAlignment(Pos.CENTER);
         GridPane.setHalignment(hostDiv, HPos.CENTER);
@@ -268,10 +269,6 @@ public class GuiCreate {
         VBox portDiv = new VBox(8, portText, portError, portTextField);
         portDiv.setAlignment(Pos.CENTER);
         GridPane.setHalignment(portDiv, HPos.CENTER);
-
-//        VBox dbNameDiv = new VBox(8, dbNameText, dbNameError, dbNameTextField);
-//        dbNameDiv.setAlignment(Pos.CENTER);
-//        GridPane.setHalignment(dbNameDiv, HPos.CENTER);
 
         VBox usernameDiv = new VBox(8, usernameText, usernameError, usernameTextField);
         usernameDiv.setAlignment(Pos.CENTER);
@@ -293,7 +290,6 @@ public class GuiCreate {
         GridPane.setConstraints(header,0,0);
         GridPane.setConstraints(hostDiv,0,1);
         GridPane.setConstraints(portDiv,0,2);
-        //GridPane.setConstraints(dbNameDiv,0,3);
         GridPane.setConstraints(usernameDiv,0,4);
         GridPane.setConstraints(passwordDiv,0,5);
         GridPane.setConstraints(fileSelectDiv,0,6);
@@ -306,20 +302,31 @@ public class GuiCreate {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * This handles the main menu for the application.
+     * Additionally, it holds buttons to display movies,
+     * Add a Movie, Modify a Movie, Delete a movie, and to
+     * exit the application
+     * @param list This is the list that holds all the movies.
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void mainMenu(ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
-        //Create Grid layout
+        // Create Grid layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(30);
         grid.setHgap(20);
 
-        //Create Main Text
+        // Create Main Text
         Text mainMenuHeader = new Text("Main Menu");
         mainMenuHeader.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
 
-        //Create Buttons
+        // Create Buttons
         Button displayMovies = new Button("Display All Movies");
-        //Button reloadList = new Button("Reload With New List");
         Button addMovie = new Button("Add A New Movie");
         Button modifyMovie = new Button("Modify A Movie");
         Button deleteMovie = new Button("Delete A Movie");
@@ -329,10 +336,6 @@ public class GuiCreate {
         displayMovies.setOnAction(event -> {
             GuiCreate.displayMovies(list, stage, connection);
         });
-
-//        reloadList.setOnAction(event -> {
-//            GuiCreate.loadMovies(list, stage, connection);
-//        });
 
         addMovie.setOnAction(event -> {
             GuiCreate.addMovie(list, stage, connection);
@@ -356,7 +359,6 @@ public class GuiCreate {
         grid.setAlignment(Pos.TOP_CENTER);
         GridPane.setHalignment(mainMenuHeader, HPos.CENTER);
         GridPane.setHalignment(displayMovies, HPos.CENTER);
-        //GridPane.setHalignment(reloadList, HPos.CENTER);
         GridPane.setHalignment(addMovie, HPos.CENTER);
         GridPane.setHalignment(modifyMovie, HPos.CENTER);
         GridPane.setHalignment(deleteMovie, HPos.CENTER);
@@ -365,7 +367,6 @@ public class GuiCreate {
         //Add UI to Grid
         grid.add(mainMenuHeader, 0,0);
         grid.add(displayMovies, 0,1);
-        //grid.add(reloadList, 0,2);
         grid.add(addMovie, 0,2);
         grid.add(modifyMovie, 0,3);
         grid.add(deleteMovie, 0,4);
@@ -379,9 +380,19 @@ public class GuiCreate {
         stage.show();
     }
 
+    /**
+     * This handles the menu to display movies. This includes
+     * sorting buttons and displaying the average of all review
+     * scores.
+     * @param list This is the list that holds all the movies.
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void displayMovies (ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
-        //Boolean Values for each button
-            //Done this way to get around lambda's being annoying about setting booleans >:^(
+        // Boolean Values for each button
+            // Done this way to get around lambda's being annoying about setting booleans >:^(
         Map<String, Boolean> filterValues = new HashMap<>();
         filterValues.put("isAscending", true);
         filterValues.put("isByID", true);
@@ -393,13 +404,13 @@ public class GuiCreate {
 
         Movie.sortMovieList(list, filterValues);
 
-        //Create Grid Layout
+        // Create Grid Layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(30);
         grid.setHgap(20);
 
-        //Text
+        // Text
         Text header = new Text("Movies");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
         VBox root = new VBox(header, grid);
@@ -410,36 +421,35 @@ public class GuiCreate {
 
 
 
-        //Table
+        // Table
         TableView<Movie> table = new TableView<>();
-            //Columns
-                //movieID
+            // Columns
+                // movieID
         TableColumn<Movie, Integer> IDColumn = new TableColumn<>("Movie ID");
         IDColumn.setCellValueFactory(new PropertyValueFactory<>("movieID"));
-                //movieName
+                // movieName
         TableColumn<Movie, String> movieNameColumn = new TableColumn<>("Movie Name");
         movieNameColumn.setCellValueFactory(new PropertyValueFactory<>("movieName"));
-                //releaseYear
+                // releaseYear
         TableColumn<Movie, Integer> releaseYearColumn = new TableColumn<>("Release Year");
         releaseYearColumn.setCellValueFactory(new PropertyValueFactory<>("releaseYear"));
-                //director
+                // director
         TableColumn<Movie, String> directorColumn = new TableColumn<>("Director");
         directorColumn.setCellValueFactory(new PropertyValueFactory<>("director"));
-                //composer
+                // composer
         TableColumn<Movie, String> composerColumn = new TableColumn<>("Composer");
         composerColumn.setCellValueFactory(new PropertyValueFactory<>("composer"));
-                //reviewScore
+                // reviewScore
         TableColumn<Movie, Double> reviewScoreColumn = new TableColumn<>("Review Score");
         reviewScoreColumn.setCellValueFactory(new PropertyValueFactory<>("reviewScore"));
-            //Add Columns to Table
+            // Add Columns to Table
         table.getColumns().clear();
-        table.getColumns().addAll(IDColumn, movieNameColumn,releaseYearColumn,directorColumn,composerColumn,reviewScoreColumn);
-        //Kept Having an extra column for no reason, this fixes it :^)
+        table.getColumns().addAll(IDColumn,movieNameColumn,releaseYearColumn,directorColumn,composerColumn,reviewScoreColumn);
+        // Kept Having an extra column for no reason, this fixes it :^)
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        //Add list into table
         table.setItems(list);
 
-        //Filters
+        // Filters
         int buttonWidthSize = 140;
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
@@ -471,11 +481,11 @@ public class GuiCreate {
 
         hBox.getChildren().addAll(ascending, descending, sortByID, sortByMovieName, sortByReleaseYear, sortByDirector, sortByComposer, sortByReviewScore);
 
-        //Menu Buttons
+        // Menu Buttons
         Button returnToMenu = new Button("Main Menu");
 
-        //Give Buttons Functionality
-            //Changes sort to Asc
+        // Give Buttons Functionality
+            // Changes sort to Asc
         ascending.setOnAction(event -> {
             filterValues.put("isAscending", true);
             Movie.sortMovieList(list, filterValues);
@@ -486,8 +496,8 @@ public class GuiCreate {
             Movie.sortMovieList(list, filterValues);
         });
 
-        //There's likely a better way, but this works so ¯\_(ツ)_/¯
-            //Changes sort to be by movieID
+        // There's likely a better way, but this works so ¯\_(ツ)_/¯
+            // Changes sort to be by movieID
         sortByID.setOnAction(event -> {
             filterValues.put("isByID", true);
             filterValues.put("isByName", false);
@@ -497,7 +507,7 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", false);
             Movie.sortMovieList(list, filterValues);
         });
-        //Changes sort to be by movieName
+        // Changes sort to be by movieName
         sortByMovieName.setOnAction(event -> {
             filterValues.put("isByID", false);
             filterValues.put("isByName", true);
@@ -507,7 +517,7 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", false);
             Movie.sortMovieList(list, filterValues);
         });
-        //Changes sort to be by releaseYear
+        // Changes sort to be by releaseYear
         sortByReleaseYear.setOnAction(event -> {
             filterValues.put("isByID", false);
             filterValues.put("isByName", false);
@@ -517,7 +527,7 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", false);
             Movie.sortMovieList(list, filterValues);
         });
-        //Changes sort to be by director
+        // Changes sort to be by director
         sortByDirector.setOnAction(event -> {
             filterValues.put("isByID", false);
             filterValues.put("isByName", false);
@@ -527,7 +537,7 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", false);
             Movie.sortMovieList(list, filterValues);
         });
-        //Changes sort to be by composer
+        // Changes sort to be by composer
         sortByComposer.setOnAction(event -> {
             filterValues.put("isByID", false);
             filterValues.put("isByName", false);
@@ -537,7 +547,7 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", false);
             Movie.sortMovieList(list, filterValues);
         });
-        //Changes sort to be by reviewScore
+        // Changes sort to be by reviewScore
         sortByReviewScore.setOnAction(event -> {
             filterValues.put("isByID", false);
             filterValues.put("isByName", false);
@@ -547,12 +557,12 @@ public class GuiCreate {
             filterValues.put("isByReviewScore", true);
             Movie.sortMovieList(list, filterValues);
         });
-        //Returns to Main Menu
+        // Returns to Main Menu
         returnToMenu.setOnAction(event -> {
             GuiCreate.mainMenu(list, stage, connection);
         });
 
-        //UI relativePos
+        // UI relativePos
         grid.setAlignment(Pos.TOP_CENTER);
 
         table.setMinWidth(600);
@@ -568,7 +578,7 @@ public class GuiCreate {
         GridPane.setHalignment(sortByReviewScore,HPos.CENTER);
         GridPane.setHalignment(returnToMenu, HPos.RIGHT);
 
-        //Add UI to Grid
+        // Add UI to Grid
         grid.add(ascending,0,1);
         grid.add(descending,0,2);
         grid.add(sortByID,3,1);
@@ -581,7 +591,7 @@ public class GuiCreate {
         grid.add(returnToMenu, 5,8,1,1);
         grid.add(avgReview,0,8);
 
-        //Setup Scene
+        // Setup Scene
         Scene scene = new Scene(root, 700, 650);
         stage.setTitle("Display Movies");
         stage.setScene(scene);
@@ -590,135 +600,27 @@ public class GuiCreate {
 
     }
 
-    public static void loadMovies (ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
-        //Create Grid Layout
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10,10,10,10));
-        grid.setVgap(15);
-        grid.setHgap(10);
-
-        //Text
-        Text header = new Text("Load Movies");
-        header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
-        GridPane.setHalignment(header, HPos.CENTER);
-
-        Text chooseFileText = new Text("Please Choose The Text\n     File To Load From:");
-        chooseFileText.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 25));
-        GridPane.setHalignment(chooseFileText, HPos.CENTER);
-
-
-        //Menu Buttons
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose Movies File");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-
-        Button returnToMenu = new Button("Main Menu");
-        GridPane.setHalignment(returnToMenu, HPos.CENTER);
-
-        Button fileOpen = new Button("Browse...");
-        fileOpen.setFont(Font.font("Arial", FontWeight.NORMAL, 25));
-        GridPane.setHalignment(fileOpen, HPos.CENTER);
-
-        //Give Buttons Functionality
-            //Actions for when browsing for a file
-        fileOpen.setOnAction(event -> {
-            File file = fileChooser.showOpenDialog(stage);
-            if(file != null) {
-                String filePath = file.getAbsolutePath();
-                //If file is found and successfully
-                if(FileOps.hotloadList(list, filePath)){
-                    Stage successPopup = new Stage();
-                    //Makes sure you cannot interact with main stage
-                    successPopup.initModality(Modality.APPLICATION_MODAL);
-                    successPopup.setTitle("Successful Read");
-
-                    Label successDescription = new Label("File Successfully Read and Imported");
-                    successDescription.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 16));
-                    successDescription.setAlignment(Pos.CENTER);
-
-                    Button acknowledge = new Button("Yipee!");
-                    acknowledge.setAlignment(Pos.BOTTOM_CENTER);
-
-                    VBox popupRoot = new VBox();
-                    popupRoot.setAlignment(Pos.CENTER);
-                    popupRoot.setSpacing(30);
-                    popupRoot.getChildren().addAll(successDescription, acknowledge);
-
-                    //acknowledge button action
-                    acknowledge.setOnAction(finalEvent -> {
-                        GuiCreate.mainMenu(list, stage, connection);
-                        successPopup.close();
-                    });
-
-                    Scene popupScene = new Scene(popupRoot, 300,100);
-                    successPopup.setScene(popupScene);
-                    successPopup.showAndWait();
-
-
-                }
-                else{//Failure to import file
-                    Stage failurePopup = new Stage();
-                    //Makes sure you cannot interact with main stage
-                    failurePopup.initModality(Modality.APPLICATION_MODAL);
-                    failurePopup.setTitle("Error");
-
-                    Label failureDescription = new Label("Error in File, cannot import:\n Check Formatting");
-                    failureDescription.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 16));
-                    failureDescription.setAlignment(Pos.CENTER);
-
-                    Button acknowledge = new Button(":^(");
-
-                    VBox popupRoot = new VBox();
-                    popupRoot.setAlignment(Pos.CENTER);
-                    popupRoot.setSpacing(30);
-                    popupRoot.getChildren().addAll(failureDescription, acknowledge);
-                    //Acknowledge button action
-                    acknowledge.setOnAction(finalEvent -> {
-                        failurePopup.close();
-                    });
-
-                    Scene popupScene = new Scene(popupRoot, 200,100);
-                    failurePopup.setScene(popupScene);
-                    failurePopup.showAndWait();
-
-                }
-
-            }//end if (File != null)
-        });
-            //Returns to menu
-        returnToMenu.setOnAction(event -> {
-            GuiCreate.mainMenu(list, stage, connection);
-        });
-
-        //Add UI to Grid
-        grid.getChildren().addAll(header,chooseFileText,fileOpen,returnToMenu);
-
-        //Position UI
-        GridPane.setConstraints(header,0,0);
-        GridPane.setConstraints(chooseFileText,0,1);
-        GridPane.setConstraints(fileOpen,0,2);
-        GridPane.setConstraints(returnToMenu, 0,4);
-
-        //Setup Scene
-        Scene scene = new Scene(grid, 300,300);
-        stage.setTitle("Load New Movies");
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    /**
+     * This handles the menu to add a movie to the list.
+     * @param list This is the list that holds all the movies
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void addMovie(ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
 
-        //Create Grid Layout
+        // Create Grid Layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(15);
         grid.setHgap(20);
 
-        //Text
+        // Text
         Text header = new Text("Add A Movie");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
 
-        //Fields
+        // Fields
         TextField movieID = new TextField();
         GridPane.setHalignment(movieID, HPos.CENTER);
 
@@ -755,7 +657,7 @@ public class GuiCreate {
         Label reviewScoreLabel = new Label("Review Score:");
         GridPane.setHalignment(reviewScoreLabel, HPos.CENTER);
 
-        //Error Messages
+        // Error Messages
         Label idError = new Label();
         GridPane.setHalignment(idError, HPos.CENTER);
         idError.setStyle("-fx-text-fill: red;");
@@ -788,15 +690,15 @@ public class GuiCreate {
 
 
 
-        //Menu Buttons
+        // Menu Buttons
         Button returnToMenu = new Button("Main Menu");
         GridPane.setHalignment(returnToMenu, HPos.CENTER);
 
         Button submit = new Button("Submit");
         GridPane.setHalignment(submit, HPos.CENTER);
 
-        //Give Buttons Functionality
-            //Submission Action
+        // Give Buttons Functionality
+            // Submission Action
         submit.setOnAction(event -> {
             Movie newMovie = new Movie();
             int currentStatus;
@@ -869,8 +771,8 @@ public class GuiCreate {
                                     reviewScoreError.setVisible(true);
                                     reviewScoreError.setText("Invalid, Must Be a number greater than or equal to 0 and also less than or equal to 10");
                                 }
-                            }//end composer check
-                        }//End Director check
+                            }// End composer checks
+                        }// End Director checks
                     }
                     else if(currentStatus == 1) {//Year Error 1
                         yearError.setVisible(true);
@@ -879,8 +781,8 @@ public class GuiCreate {
                     else if(currentStatus == 2) {//Year Error 2
                         yearError.setVisible(true);
                         yearError.setText("Invalid, Must Be a Whole Number Greater Than or Equal to 1888");
-                    }//End Year Check
-                }//End Name Check
+                    }// End Year Checks
+                }// End Name Checks
             }
             else if(currentStatus == 1) {//Movie ID Error 1
                 idError.setVisible(true);
@@ -889,7 +791,7 @@ public class GuiCreate {
             else if(currentStatus == 2) {//Movie ID Error 2
                 idError.setVisible(true);
                 idError.setText("Please Enter a Whole Number Greater Than 0");
-            }//endmovieID check
+            }// endmovieID checks
 
         });
 
@@ -898,14 +800,14 @@ public class GuiCreate {
             GuiCreate.mainMenu(list, stage, connection);
         });
 
-        //Add UI to Grid
+        // Add UI to Grid
         grid.setAlignment(Pos.TOP_CENTER);
         grid.getChildren().addAll(header,movieID,movieIDLabel,movieName,movieNameLabel,releaseYear,releaseYearLabel,
                 director,directorLabel,composer,composerLabel,reviewScore,reviewScoreLabel,submit,returnToMenu,
                 idError,nameError,yearError,directorError,composerError,reviewScoreError
         );
 
-        //Position UI
+        // Position UI
         GridPane.setConstraints(movieIDLabel, 0, 1);
         GridPane.setConstraints(idError, 0,2);
         GridPane.setConstraints(movieID, 0, 3);
@@ -938,7 +840,7 @@ public class GuiCreate {
 
 
 
-        //Setup Scene
+        // Setup Scene
         Scene scene = new Scene(scrollableWindow, 400,700);
         stage.setTitle("Add A Movie");
         stage.setScene(scene);
@@ -946,14 +848,24 @@ public class GuiCreate {
         stage.show();
     }
 
+    /**
+     * This handles the menu to search for a movie to modify.
+     * Tightly related to modifyMovieSearch()
+     * @param list This is the list that holds all the movies
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     * @see GuiCreate#modifyMovie(ObservableList, int, Stage, ConnectionToPass)
+     */
     public static void modifyMovieSearch(ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
-        //Create Grid Layout
+        // Create Grid Layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setHgap(10);
         grid.setVgap(15);
 
-        //Text
+        // Text
         Text header = new Text("Modify a Movie");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
         GridPane.setHalignment(header,HPos.CENTER);
@@ -961,35 +873,33 @@ public class GuiCreate {
         Label searchLabel = new Label("Search By Movie ID or Name:");
         GridPane.setHalignment(searchLabel, HPos.CENTER);
 
-        //Error Display
+        // Error Display
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red;");
         GridPane.setHalignment(errorLabel, HPos.CENTER);
         errorLabel.setVisible(false);
 
-
-        //Fields
+        // Fields
         TextField movieSearch = new TextField();
         GridPane.setHalignment(movieSearch, HPos.CENTER);
 
-        //Menu Buttons
+        // Menu Buttons
         Button search = new Button("Search");
         GridPane.setHalignment(search, HPos.CENTER);
-
 
         Button returnToMenu = new Button("Main Menu");
         GridPane.setHalignment(returnToMenu, HPos.CENTER);
 
-        //Give Buttons Functionality
+        // Give Buttons Functionality
         search.setOnAction(event -> {
             int result = Movie.movieSearch(list, movieSearch.getText());
             if (result == -1){
                 errorLabel.setVisible(true);
                 errorLabel.setText("Movie Not Found");
             }
-            else{//Show success finding movie:
+            else{// Show success finding movie:
                 Stage successPopup = new Stage();
-                //Makes sure you cannot interact with main stage
+                // Makes sure you cannot interact with main stage
                 successPopup.initModality(Modality.APPLICATION_MODAL);
                 successPopup.setTitle("Movie Found");
 
@@ -1005,7 +915,7 @@ public class GuiCreate {
                 popupRoot.setSpacing(30);
                 popupRoot.getChildren().addAll(successDescription, acknowledge);
 
-                //acknowledge button action
+                // acknowledge button action
                 acknowledge.setOnAction(finalEvent -> {
                     GuiCreate.modifyMovie(list,result,stage,connection);
                     successPopup.close();
@@ -1023,20 +933,18 @@ public class GuiCreate {
             GuiCreate.mainMenu(list, stage, connection);
         });
 
-        //Add UI to Grid
+        // Add UI to Grid
         grid.getChildren().addAll(header, searchLabel, errorLabel, movieSearch, search, returnToMenu);
 
-        //Position UI
+        // Position UI
         GridPane.setConstraints(header, 0,0);
-
         GridPane.setConstraints(searchLabel, 0,1);
         GridPane.setConstraints(errorLabel, 0,2);
         GridPane.setConstraints(movieSearch, 0 ,3);
         GridPane.setConstraints(search, 0,4);
-
         GridPane.setConstraints(returnToMenu, 0,5);
 
-        //Setup Scene
+        // Setup Scene
         Scene scene = new Scene(grid, 300,350);
         stage.setTitle("Modify A Movie");
         stage.setScene(scene);
@@ -1044,18 +952,32 @@ public class GuiCreate {
         stage.show();
     }
 
+    /**
+     * <b>DO NOT CALL ON ITS OWN!!!!</b>
+     * This method is called only <i>from</i> modifyMovieSearch().
+     * This handles the menu that directly shows the areas of a
+     * movie to be modified
+     * @param list This is the list that holds all the movies.
+     * @param index This is the index of where the movie to be
+     *              modified is.
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     * @see GuiCreate#modifyMovieSearch(ObservableList, Stage, ConnectionToPass)
+     */
     public static void modifyMovie(ObservableList<Movie> list, int index, Stage stage,ConnectionToPass connection){
-        //Create Grid Layout
+        // Create Grid Layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(15);
         grid.setHgap(20);
 
-        //Text
+        // Text
         Text header = new Text("Modify A Movie");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
 
-        //Fields
+        // Fields
         TextField movieID = new TextField(Integer.toString(list.get(index).getMovieID()));
         GridPane.setHalignment(movieID, HPos.CENTER);
 
@@ -1092,7 +1014,7 @@ public class GuiCreate {
         Label reviewScoreLabel = new Label("Review Score:");
         GridPane.setHalignment(reviewScoreLabel, HPos.CENTER);
 
-        //Error Messages
+        // Error Messages
         Label idError = new Label();
         GridPane.setHalignment(idError, HPos.CENTER);
         idError.setStyle("-fx-text-fill: red;");
@@ -1123,22 +1045,20 @@ public class GuiCreate {
         reviewScoreError.setStyle("-fx-text-fill: red;");
         reviewScoreError.setVisible(false);
 
-
-
-        //Menu Buttons
+        // Menu Buttons
         Button returnToMenu = new Button("Main Menu");
         GridPane.setHalignment(returnToMenu, HPos.CENTER);
 
         Button submit = new Button("Submit");
         GridPane.setHalignment(submit, HPos.CENTER);
 
-        //Give Buttons Functionality
-        //Submission Action
+        // Give Buttons Functionality
+            // Submission Action
         submit.setOnAction(event -> {
             Movie originalMovie = list.get(index);
             Movie newMovie = new Movie();
             int currentStatus;
-            //LMAO:    Basically its getting the state (via int) from the setters, and 0 is success, anything else is error
+            // Basically its getting the state (via int) from the setters, and 0 is success, anything else is error
             if((currentStatus = newMovie.setMovieID(movieID.getText())) == 0){
                 idError.setVisible(false);
                 if((currentStatus = newMovie.setMovieName(movieName.getText())) == 0){
@@ -1150,8 +1070,7 @@ public class GuiCreate {
 
                                     reviewScoreError.setVisible(false);
                                     list.remove(originalMovie);
-
-                                    //Check if duplicate ID
+                                    // Checks for duplicate ID
                                     boolean acceptableDupes;
                                     int dupes = 0;
                                     for (Movie movie : list) {
@@ -1160,16 +1079,14 @@ public class GuiCreate {
                                             break;
                                         }
                                     }
-
                                     if(dupes > 0){acceptableDupes = false;}
                                     else{acceptableDupes = true;}
-
                                     if(acceptableDupes){
                                         list.add(newMovie);
                                         list.sort(MovieComparator.sortByIDAsc());
-                                        //show success dialog
+                                        // Shows success dialog
                                         Stage successPopup = new Stage();
-                                        //Makes sure you cannot interact with main stage
+                                        // Makes sure you cannot interact with main stage
                                         successPopup.initModality(Modality.APPLICATION_MODAL);
                                         successPopup.setTitle("Success!");
 
@@ -1185,7 +1102,7 @@ public class GuiCreate {
                                         popupRoot.setSpacing(30);
                                         popupRoot.getChildren().addAll(successDescription, acknowledge);
 
-                                        //acknowledge button action
+                                        // Acknowledge button action
                                         acknowledge.setOnAction(finalEvent -> {
                                             GuiCreate.mainMenu(list, stage, connection);
                                             successPopup.close();
@@ -1214,8 +1131,8 @@ public class GuiCreate {
                                     reviewScoreError.setVisible(true);
                                     reviewScoreError.setText("Invalid, Must Be a number greater than or equal to 0 and also less than or equal to 10");
                                 }
-                            }//end composer check
-                        }//End Director check
+                            }// End composer check
+                        }// End Director check
                     }
                     else if(currentStatus == 1) {//Year Error 1
                         yearError.setVisible(true);
@@ -1224,8 +1141,8 @@ public class GuiCreate {
                     else if(currentStatus == 2) {//Year Error 2
                         yearError.setVisible(true);
                         yearError.setText("Invalid, Must Be a Whole Number Greater Than or Equal to 1888");
-                    }//End Year Check
-                }//End Name Check
+                    }// End Year Check
+                }// End Name Check
             }
             else if(currentStatus == 1) {//Movie ID Error 1
                 idError.setVisible(true);
@@ -1234,23 +1151,22 @@ public class GuiCreate {
             else if(currentStatus == 2) {//Movie ID Error 2
                 idError.setVisible(true);
                 idError.setText("Please Enter a Whole Number Greater Than 0");
-            }//endmovieID check
+            }// endmovieID check
 
         });
-
 
         returnToMenu.setOnAction(event -> {
             GuiCreate.mainMenu(list, stage, connection);
         });
 
-        //Add UI to Grid
+        // Add UI to Grid
         grid.setAlignment(Pos.TOP_CENTER);
         grid.getChildren().addAll(header,movieID,movieIDLabel,movieName,movieNameLabel,releaseYear,releaseYearLabel,
                 director,directorLabel,composer,composerLabel,reviewScore,reviewScoreLabel,submit,returnToMenu,
                 idError,nameError,yearError,directorError,composerError,reviewScoreError
         );
 
-        //Position UI
+        // Position UI
         GridPane.setConstraints(movieIDLabel, 0, 1);
         GridPane.setConstraints(idError, 0,2);
         GridPane.setConstraints(movieID, 0, 3);
@@ -1281,9 +1197,7 @@ public class GuiCreate {
         ScrollPane scrollableWindow = new ScrollPane(grid);
         scrollableWindow.setFitToWidth(true);
 
-
-
-        //Setup Scene
+        // Setup Scene
         Scene scene = new Scene(scrollableWindow, 400,700);
         stage.setTitle("Add A Movie");
         stage.setScene(scene);
@@ -1291,14 +1205,23 @@ public class GuiCreate {
         stage.show();
     }
 
+    /**
+     * This handles the menu that prompts for a movie to delete
+     * and, if user permitting, delete the entry from the list.
+     * @param list This is the list that holds all the movies
+     * @param stage This is the main stage that the program runs
+     *              off of.
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void deleteMovie(ObservableList<Movie> list, Stage stage, ConnectionToPass connection){
-        //Create Grid Layout
+        // Create Grid Layout
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(15);
         grid.setHgap(12);
 
-        //Text
+        // Text
         Text header = new Text("Delete a Movie");
         header.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 38));
         GridPane.setHalignment(header,HPos.CENTER);
@@ -1306,42 +1229,40 @@ public class GuiCreate {
         Label searchLabel = new Label("Search By Movie ID or Name:");
         GridPane.setHalignment(searchLabel, HPos.CENTER);
 
-        //Error Display
+        // Error Display
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red;");
         GridPane.setHalignment(errorLabel, HPos.CENTER);
         errorLabel.setVisible(false);
 
-
-        //Fields
+        // Fields
         TextField movieSearch = new TextField();
         GridPane.setHalignment(movieSearch, HPos.CENTER);
 
-        //Menu Buttons
+        // Menu Buttons
         Button search = new Button("Search");
         GridPane.setHalignment(search, HPos.CENTER);
-
 
         Button returnToMenu = new Button("Main Menu");
         GridPane.setHalignment(returnToMenu, HPos.CENTER);
 
-        //Give Buttons Functionality
+        // Give Buttons Functionality
         search.setOnAction(event -> {
             int result = Movie.movieSearch(list, movieSearch.getText());
             if (result == -1){
                 errorLabel.setVisible(true);
                 errorLabel.setText("Movie Not Found");
             }
-            else{//Show success finding movie:
+            else{// Show success finding movie:
                 Stage successPopup = new Stage();
-                //Makes sure you cannot interact with main stage
+                // Makes sure you cannot interact with main stage
                 successPopup.initModality(Modality.APPLICATION_MODAL);
                 successPopup.setTitle("Movie Found");
 
                 Label successDescription = new Label("Movie Has Been Found");
                 successDescription.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 16));
                 successDescription.setAlignment(Pos.CENTER);
-                //shows movie info
+                // Displays movie info
                 Label movieInfo = new Label(list.get(result).toString());
                 movieInfo.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 12));
                 movieInfo.setAlignment(Pos.CENTER);
@@ -1352,25 +1273,22 @@ public class GuiCreate {
                 yesNo.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 12));
                 yesNo.setAlignment(Pos.CENTER);
 
-
-
                 Button yes = new Button("Yes");
                 yes.setAlignment(Pos.BOTTOM_RIGHT);
                 Button no = new Button("No");
                 no.setAlignment(Pos.BOTTOM_LEFT);
 
-                //Container to have buttons fit on same row
+                // Container was needed to have buttons fit on same row
                 HBox bothButtons = new HBox(20);
                 bothButtons.getChildren().addAll(yes,no);
                 bothButtons.setAlignment(Pos.CENTER);
-
 
                 VBox popupRoot = new VBox();
                 popupRoot.setAlignment(Pos.CENTER);
                 popupRoot.setSpacing(20);
                 popupRoot.getChildren().addAll(successDescription,movieInfo,yesNo,bothButtons);
 
-                //acknowledge button action
+                // Acknowledge button action
                 yes.setOnAction(newEvent -> {
                     list.remove(result);
                     errorLabel.setVisible(false);
@@ -1396,20 +1314,19 @@ public class GuiCreate {
             GuiCreate.mainMenu(list, stage, connection);
         });
 
-        //Add UI to Grid
+        // Add UI to Grid
         grid.getChildren().addAll(header, searchLabel, errorLabel, movieSearch, search, returnToMenu);
 
-        //Position UI
+        // Position UI
         GridPane.setConstraints(header, 0,0);
 
         GridPane.setConstraints(searchLabel, 0,1);
         GridPane.setConstraints(errorLabel, 0,2);
         GridPane.setConstraints(movieSearch, 0 ,3);
         GridPane.setConstraints(search, 0,4);
-
         GridPane.setConstraints(returnToMenu, 0,5);
 
-        //Setup Scene
+        // Setup Scene
         Scene scene = new Scene(grid, 300,350);
         stage.setTitle("Delete A Movie");
         stage.setScene(scene);

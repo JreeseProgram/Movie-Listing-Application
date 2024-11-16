@@ -1,7 +1,4 @@
 package com.reese.mla;
-/*                         MAIN
- *  This mainly calls required methods to run the program
- */
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -10,12 +7,22 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.sql.Connection;
-import java.util.concurrent.atomic.AtomicReference;
-
-
+/**
+ * NOT THE "MAIN" IN THE COMPILER!. Java compiler hates when
+ * main either extends or implements another component, and
+ * the "main" is now in CompilingSucks
+ * @see CompilingSucks
+ */
 public class Main extends Application {
 
+    /**
+     * Acts as main due to JavaFX requirements. initializes all
+     * necessary items for the rest of the program to use.
+     * @param stage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     @Override
     public void start(Stage stage){
         ConnectionToPass connection = new ConnectionToPass();
@@ -30,6 +37,12 @@ public class Main extends Application {
         });
 
     }
+
+    /**
+     * Launches the JavaFX component for initial startup
+     * @param args Traditional main args
+     *
+     */
     public static void main(String[] args) {
         launch(args);
     }

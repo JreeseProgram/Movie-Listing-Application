@@ -1,22 +1,18 @@
 package com.reese.mla;
-/*                               Methods
- * This contains methods that will be reused many times and simplfy the code
- * mostly in terms of readability
- */
-import java.util.Scanner;
 
+/**
+ * Contains simple methods that are highly
+ * reusable and simplify debugging
+ */
 public class Methods {
 
-    //displays a message in the console
+    /**
+     * This method takes a string and displays
+     * it to the console.
+     * @param mess The message you wish to
+     *             display to the console
+     */
     public static void showMessage(String mess){
         System.out.println(mess);
     }
-    //gets an input from the user and returns it as a string
-    public static String getInput(String request){
-        Scanner in = new Scanner(System.in);
-        Methods.showMessage(request);
-        String result = in.nextLine();
-        return result;
-    }
-
 }

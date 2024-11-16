@@ -1,39 +1,43 @@
 package com.reese.mla;
-/*                          FileOps
- * Creates/reads a file from the disk to add into the list
- * as well as importing/exporting SQL
- */
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
+import javafx.collections.ObservableList;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-
+/**
+ * This class houses only static methods, of which are
+ * File operations as well as SQL operations
+ */
 public class FileOps {
 
     //Initializes DB and returns 0 if successful, 1 for SQL error, and 2 for IOE error
+
+    /**
+     * This initializes the DB connection as well as fills in
+     * the list with information from the DB
+     * @param list This is the list that holds all the movies
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     * @param url This is the full URL for the SQL connection
+     * @param user This is the username for the SQL connection
+     * @param password This is the password for the SQL connection
+     * @param pathToDb This is the path to a SQL file
+     * @return Success Status:
+     *         <ul>
+     *             <li>0 if successful</li>
+     *             <li>1 if SQL Error</li>
+     *             <li>2 for IOE Error</li>
+     *         </ul>
+     */
     public static int initializeDB(ObservableList<Movie> list, ConnectionToPass connection, String url, String user, String password, String pathToDb){
         try{
-            //Connect to DB
             connection.connect(url, user, password);
-
-            //Create our DB
+            importFromSQL(connection, pathToDb);
+            // Ensures everything is up-to-date
             Statement statement = connection.getConnection().createStatement();
 
-
-
-
-            importFromSQL(connection, pathToDb);
-            //Ensures everything is up-to-date
-            statement = connection.getConnection().createStatement();
-
-            //ResultSet is basically the table outputted from a query
+            // ResultSet is basically the table outputted from a query
             ResultSet table = statement.executeQuery("SELECT MovieID, MovieName, ReleaseYear, Director, Composer, ReviewScore FROM movies;");
             //Adds to our list a new movie for every line there is
             while(table.next()){
@@ -58,10 +62,21 @@ public class FileOps {
         }
     }
 
-    //reads the SQL file and imports into our DB in connection
+    /**
+     * This connects to the DB and then writes to the DB
+     * from a SQL file
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     * @param pathToDb This is the path to a SQL file
+     * @throws IOException Handle the IO exception for if
+     *                     path to file is impossible to
+     *                     retrieve
+     * @throws SQLException Handle a SQL error, likely Bad
+     *                      Connection info
+     */
     public static void importFromSQL(ConnectionToPass connection, String pathToDb) throws IOException, SQLException {
         Methods.showMessage(pathToDb);
-        //only runs this if there is a path to a new db
+        // Only runs this if there IS a path to a new db
         if(pathToDb != null && !pathToDb.isEmpty()) {
             Statement statement = connection.getConnection().createStatement();
             String dbname = "MovieDB";
@@ -76,14 +91,15 @@ public class FileOps {
             String line;
 
             while ((line = bReader.readLine()) != null) {
-                //Remove Whitespace
+                // Remove excess whitespace to ensure that commands execute correctly
                 line = line.trim();
-                //exclude any lines that are empty or are comments
+                // This removes any lines that are empty or are comments
+                // to ensure we don't label the entire command a comment
                 if (line.isEmpty() || line.startsWith("--")) {
                     continue;
                 }
                 sBuilder.append(line);
-                //If end of current statement, execute the statement
+
                 if (line.endsWith(";")) {
                     statement.execute(sBuilder.toString());
                     sBuilder.setLength(0);
@@ -98,18 +114,25 @@ public class FileOps {
 
     }
 
+    /**
+     * This is called at the end of the program so ensure that
+     * whenever the user closes the application changes are saved.
+     * @param list This is the list that holds all the movies
+     * @param connection This is the ConnectionToPass that
+     *                   stores the current connection.
+     */
     public static void updateDB(ObservableList<Movie> list, ConnectionToPass connection){
         try {
             Statement statement = connection.getConnection().createStatement();
-            //Clears current table
+            //Clears current table so that we don't duplicate rows
             statement.execute("TRUNCATE TABLE movies;");
             statement.execute("USE movieDB;");
             String executionStatement;
             //Inserts every movie into the DB
             for(Movie movie : list){
                 executionStatement = String.format("INSERT INTO movies VALUES(%d, '%s', %d,'%s', '%s', %f);",
-                                                        movie.getMovieID(), movie.getMovieName(), movie.getReleaseYear(),
-                                                        movie.getDirector(),movie.getComposer(), movie.getReviewScore()
+                                                    movie.getMovieID(), movie.getMovieName(), movie.getReleaseYear(),
+                                                    movie.getDirector(),movie.getComposer(), movie.getReviewScore()
                 );
                 statement.execute(executionStatement);
             }
@@ -118,82 +141,5 @@ public class FileOps {
             SQLE.printStackTrace();
             System.exit(0);
         }
-    }
-
-    public static boolean hotloadList(ObservableList<Movie> list, String path){
-        //Get File Path From User
-
-        Path filePath = Paths.get(path);
-        List<Movie> tempList = new ArrayList<>();
-        boolean fileExists;
-       
-        if (Files.notExists(filePath)) {
-            fileExists = false;
-            Methods.showMessage("File Not Found");
-            return false;
-        }
-        else{
-            fileExists = true;
-            Methods.showMessage("File Found!");
-        }
-
-        //if the file exists it will then attempt to read and delimit the file
-        if(fileExists){
-            try(BufferedReader bReader = new BufferedReader(new FileReader(filePath.toString()))){
-                ArrayList<String[]> fromFile = new ArrayList<String[]>();
-                String temp = "";
-                //while the current line is not null, add to the list
-                while((temp = bReader.readLine()) != null){
-                    fromFile.add(temp.split(","));
-                }
-                if(!(fromFile.size() == 0)){
-                //takes the new delimited strings and passes them into the book constructor
-                    for (String[] strings : fromFile) {
-                        tempList.add(new Movie(Integer.parseInt(strings[0]), strings[1],Integer.parseInt(strings[2]), strings[3], strings[4], Double.parseDouble(strings[5])));
-                    }
-                }
-                //Search for duplicates
-                int dupeCount = 0;
-                //set used to reduce duplicates and having the full list be an array list would not be desirable
-                Set<Integer> IDtoRemove = new LinkedHashSet<Integer>();
-            
-                for (Movie movie : tempList) {
-                    dupeCount = 0;
-                    for(Movie movieCompare : tempList){
-                        if(movie.getMovieID() == movieCompare.getMovieID()){
-                            dupeCount++;
-                        }
-                    }
-                    if(dupeCount > 1){
-                        IDtoRemove.add(movie.getMovieID());
-                    }
-                }
-                //delete dupes entirely (if multiple 2's, remove all 2's) then sort
-                for (Integer id : IDtoRemove) {
-                    tempList.removeIf(movie -> movie.getMovieID() == id);
-                }
-                list.clear();
-                list.setAll(tempList);
-                list.sort(MovieComparator.sortByIDAsc());
-                return true;
-            }
-            catch(IOException IOE){
-                Methods.showMessage(IOE.toString());
-                return false;
-            }
-            catch(IndexOutOfBoundsException IOOBE){
-                Methods.showMessage("List had an out of bounds exception");
-                return false;
-            }
-            catch(NumberFormatException NFE){
-                Methods.showMessage("When Creating a New Movie, There was a field in the wrong section ignoring item");
-                return false;
-            }
-            catch(NullPointerException NPE){
-                Methods.showMessage("Startup File is empty, Ignoring file");
-                return false;
-            }        
-        }//End if(fileExists)
-        else return false;
     }
 }
